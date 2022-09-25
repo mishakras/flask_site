@@ -24,12 +24,12 @@ def register():
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO user (username, password) VALUES (?, ?)",
+                    "INSERT INTO student (username, password) VALUES (?, ?)",
                     (username, generate_password_hash(password)),
                 )
                 db.commit()
             except db.IntegrityError:
-                error = f"User {username} is already registered."
+                error = f"Student {username} is already registered."
             else:
                 return redirect(url_for("auth.login"))
         flash(error)
@@ -43,16 +43,16 @@ def login():
         password = request.form['password']
         db = get_db()
         error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
+        student = db.execute(
+            'SELECT * FROM student WHERE username = ?', (username,)
         ).fetchone()
-        if user is None:
+        if student is None:
             error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(student['password'], password):
             error = 'Incorrect password.'
         if error is None:
             session.clear()
-            session['user_id'] = user['id']
+            session['student_id'] = student['id']
             return redirect(url_for('index'))
 
         flash(error)
@@ -61,12 +61,12 @@ def login():
 
 @bp.before_app_request
 def load_logged_in_user():
-    user_id = session.get('user_id')
-    if user_id is None:
-        g.user = None
+    student_id = session.get('student_id')
+    if student_id is None:
+        g.student = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
+        g.student = get_db().execute(
+            'SELECT * FROM student WHERE id = ?', (student_id,)
         ).fetchone()
 
 

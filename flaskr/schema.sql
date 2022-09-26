@@ -1,7 +1,13 @@
 DROP TABLE IF EXISTS student;
 DROP TABLE IF EXISTS subject;
+DROP TABLE IF EXISTS admin;
 DROP TABLE IF EXISTS user_subject;
 
+CREATE TABLE admin (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL
+);
 
 CREATE TABLE student (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -23,3 +29,6 @@ CREATE TABLE user_subject (
   FOREIGN KEY (student_id) REFERENCES student (id),
   FOREIGN KEY (subject_id) REFERENCES subject (id)
 );
+
+INSERT INTO admin (username,password)
+VALUES("admin", 123456);

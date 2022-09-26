@@ -1,7 +1,8 @@
 import os
 
 from flask import Flask
-from . import auth
+from . import student
+from . import admin
 from . import db
 
 def create_app(test_config=None):
@@ -27,5 +28,6 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
     db.init_app(app)
-    app.register_blueprint(auth.bp)
+    app.register_blueprint(student.bp)
+    app.register_blueprint(admin.bp)
     return app
